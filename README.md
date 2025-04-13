@@ -1,208 +1,85 @@
-# 🎯 Tema Gemma (en desarrollo)
-
-Práctica de la Semana 3 de DAW.
+# 🧩 Práctica Semana 4 – Desarrollo Avanzado de Temas en WordPress
 
 ## 🎯 Objetivo
 
-Crear una plantilla de WordPress desde cero.
+Profundizar en la creación de temas en WordPress incorporando conceptos avanzados como **tipos de contenido personalizados** y **plantillas de archivo dinámicas**.
 
 ---
 
-## 📆 Instalación de WordPress y creación del tema Momentum
+## 1️⃣ Custom Post Type: `proyectos`
 
-### 🔧 Paso 1: Instalación local de WordPress
+- Se registró un nuevo tipo de contenido personalizado llamado `proyectos` mediante la función `register_post_type()` en `functions.php`.
 
-- Descarga de WordPress desde [wordpress.org](https://wordpress.org)
-- Instalación en local mediante XAMPP en:
-  ```
-  C:\xampp\htdocs\tema-gemma\
-  ```
+- Este post type incluye:
+  - Título
+  - Contenido
+  - Imagen destacada (`add_theme_support('post-thumbnails')`)
 
-### 📁 Paso 2: Creación de base de datos
+- Se añadió un icono y un menú personalizado en el panel de administración de WordPress.
 
-- Desde phpMyAdmin, se crea la base de datos `bd_gemma`
-- Datos de conexión:
-  - Usuario: `root`
-  - Contraseña: *(vacía)*
-  - Servidor: `localhost`
-  - Prefijo de tabla: `wp_`
+![](ImagenesReadme/loopEntradasDinamico.jpg)
 
-### 🌐 Paso 3: Instalación vía navegador
+- Se crearon 3 proyectos de ejemplo desde el panel de administración, cada uno con su contenido e imagen destacada correspondiente.
 
-- Acceso a `http://localhost/tema-gemma`
-- Se completa el asistente con:
-  - Título del sitio: Crecimiento Personal
-  - Usuario y contraseña
-  - Correo electrónico
-  - Visibilidad desmarcada para motores de búsqueda
-
-![Instalación de WordPress desde el navegador](ImagenesReadme/InstalacionWordpressNavegador.jpg)
+![Vista individual del proyecto. Título centrado, imagen destacada en tamaño equilibrado y descripción detallada. Incluye botón para volver al listado.](ImagenesReadme/ImagenProyectoEjemplo.jpg)
 
 ---
 
-## 📁 Estructura inicial del tema Momentum
+## 2️⃣ Plantilla de archivo para el CPT – `archive-proyectos.php`
 
-### Creación de carpetas y archivos base
+- Se creó el archivo `archive-proyectos.php` para mostrar el listado de proyectos del CPT.
+- Cada proyecto se presenta en formato de tarjeta con:
+  - Imagen destacada
+  - Título enlazado
+  - Extracto del contenido
 
-- En `wp-content/themes/` se crea la carpeta `Momentum`
-- Estructura inicial:
-  - `style.css`
-  - `index.html`, `page.html`, `single.html`
-  - `css/`, `js/`, `images/`
+- Diseño responsivo en columnas usando Bootstrap (3 columnas en escritorio).
 
-### Conversión a archivos WordPress
+### ✨ Resultado visible en:
+[`http://localhost/tema-gemma/proyectos/`](http://localhost/tema-gemma/proyectos/)
 
-- `index.html` → `index.php`
-- `page.html` → `page.php`
-- `single.html` → `single.php`
-- Se crean `functions.php`, `header.php`, `footer.php`, `sidebar.php`
-
-### Configuración de `style.css`
-
-- Se añaden metadatos oficiales del tema
-
-![Captura de la documentación oficial de WordPress](ImagenesReadme/configurar-style-css.jpg)
-
-### Activación del tema
-
-- Desde el panel de WordPress: `Apariencia > Temas > Activar`
-
-![El tema Momentum aparece en WordPress como tema disponible para activar](ImagenesReadme/mitemaenwordpress.jpg)
-![Detalles del tema definidas en el archivo style.css](ImagenesReadme/Detalledeltema.jpg)
+![Listado de proyectos del Custom Post Type “Proyectos”. Galería con tres tarjetas que incluyen imagen destacada, título enlazado y extracto. Diseño organizado en columnas.](ImagenesReadme/ListadoProyectos.jpg)
 
 ---
 
-## 🧰 Carga de estilos y primeros ajustes
+## 3️⃣ Plantillas de categoría
 
-### Problemas iniciales con estilos
+### 🔹 `category.php`
+- Plantilla genérica que aplica a cualquier categoría de WordPress.
+- Muestra entradas en formato tarjeta con:
+  - Imagen destacada
+  - Título
+  - Extracto del contenido
 
-- El tema se visualiza sin formato por no cargarse correctamente `style.css`
+- Diseño responsivo de 3 columnas usando Bootstrap.
 
-![Captura del tema instalado sin estilos](ImagenesReadme/temainstalado1.jpg)
-
-### Solución con template tag `bloginfo('template_url')`
-
-```php
-<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/css/bootstrap.min.css">
-```
-
-![Captura mostrando los estilos aplicados](ImagenesReadme/estilosEncontrados.jpg)
-
----
-
-## 🧩 Separación en archivos reutilizables
-
-- Se crea `header.php` con el contenido del `<head>` y se incluye en `index.php` con `get_header()`
-- Se separa también `footer.php`
+> Para comprobar su funcionamiento, se añadieron dos categorías:
+- `noticias` (con plantilla específica)
+- `mindfulness-y-bienestar` (usa la plantilla genérica)
 
 ---
 
-## 🍔 Implementación del menú
+### 🔹 `category-noticias.php`
+- Plantilla específica para la categoría **“Noticias”**.
+- Personalizaciones añadidas:
+  - Encabezado con título en rojo y emoji 🗞️
+  - Texto introductorio
+  - Tarjetas coherentes con el resto del diseño pero destacadas visualmente
 
-### HTML original:
-```html
-<ul class="navbar-nav ms-auto text-center">
-  <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-</ul>
-```
+### 📍 URL de ejemplo para probar la plantilla específica:
+[`http://localhost/tema-gemma/category/noticias`](http://localhost/tema-gemma/category/noticias)
 
-### Código en WordPress:
-```php
-<?php 
-  wp_nav_menu(array(
-    'theme_location' => 'menu-principal',
-    'container_class' => 'collapse navbar-collapse',
-    'items_wrap'=>'<ul class="navbar-nav ms-auto text-center">%3$s</ul>'
-  )); 
-?>
-```
-
-### Registro del menú en `functions.php`
-```php
-register_nav_menus(array(
-  'menu-principal' => __('Menú Principal', 'momentum'),
-));
-```
+![Vista personalizada de la categoría “Noticias” utilizando el archivo category-noticias.php. Se muestra título rojo con icono, descripción y una tarjeta con imagen destacada, título del artículo, extracto y botón “Leer más”.](ImagenesReadme/categoria_Noticias.jpg)
 
 ---
 
-## 🏗️ Páginas del tema
+## ✅ Fin Práctica
 
-### `front-page.php`
+Con esta práctica se ha implementado:
+- Un tipo de contenido personalizado completo
+- Plantillas personalizadas para archivos y categorías
 
-- Muestra contenido estático o dinámico de la página de inicio configurada desde el panel
-
-### `home.php`
-
-- Muestra listado de entradas mediante el Loop de WordPress, imagen destacada, título, extracto y botón "Leer más"
-
-### `single.php` y `page.php`
-
-- Convertidos desde `single.html` y `page.html`
-- Cargan contenido dinámico con `the_title()`, `the_content()`, `get_header()`, `get_footer()`
 
 ---
 
-## 🔁 Loop de WordPress
 
-```php
-<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-    <!-- contenido del artículo -->
-<?php endwhile; endif; ?>
-```
-
-![Listado de entradas generado con el Loop de WordPress. Cada tarjeta muestra la imagen destacada, el título enlazado, un extracto del contenido, la fecha y la categoría.](ImagenesReadme/loopEntradasDinamico.jpg)
-
----
-
-## 🖼️ Imágenes destacadas
-
-- Activación en `functions.php`:
-```php
-add_theme_support('post-thumbnails');
-```
-- Reemplaza `<img>` manual por:
-```php
-the_post_thumbnail();
-```
-
----
-
-## 🧱 Sidebar dinámico
-
-### 📂 Paso 1: Crear `sidebar.php`
-
-- Extraído desde `single.php`, incluye:
-```php
-<?php get_sidebar(); ?>
-```
-- Se mantiene el `div` con clases Bootstrap en el layout
-
-### 📂 Paso 2: Registrar el sidebar
-
-```php
-register_sidebar( array(
-  'name'          => 'Sidebar Principal',
-  'id'            => 'sidebar-principal',
-  'before_widget' => '<div class="widget mb-4">',
-  'after_widget'  => '</div>',
-  'before_title'  => '<h4>',
-  'after_title'   => '</h4>',
-) );
-```
-
-![Captura de la documentación oficial de WordPress donde se muestra un ejemplo de cómo registrar un sidebar dentro del archivo functions.php, utilizando la función register_sidebar().](ImagenesReadme/EjemploSidebars.jpg)
-
-![Visualización del sidebar dinámico en el tema WordPress. Incluye un calendario, enlaces a páginas como Blog y Contacto, y se muestra correctamente en la parte derecha de la plantilla.](ImagenesReadme/visualizacionSidebar.jpg)
-
----
-
-## ✅ Resultado final
-
-- Plantilla modular y adaptada a WordPress
-- Menú dinámico y sidebar funcional
-- Loop con imágenes destacadas
-- Página de inicio personalizada
-- Compatible con edición desde el panel de administración
-
-🎯 El tema "Momentum" está preparado para entregarse como práctica final.

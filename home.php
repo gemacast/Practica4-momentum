@@ -1,7 +1,13 @@
+<?php 
+/* en este caso se usa esta pagina para mostrar todas las entdadas del blog
+En mi caso coincide la estructura con la que tengo en el index, voy a cambiar algo para diferenciarlas
+Añado un titulo personalizado y un mensaje solo visible en el blog*/
 
-<?php get_header();?> 
-<h1 class=" my-5 text-center" >Estas en el index.php</h1>
+get_header();?> 
     <!-- contenido -->
+     <body class="pagina-blog">
+     <h1 class=" my-5 text-center" >Bienvenido/a al blog</h1>
+     <p class="h2 text-center"> Consulta nuestras publicaciones recientes sobre crecimiento personal</p>
      <div class="container my-5">
         <!-- articulo -->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"> 
@@ -26,5 +32,3 @@
         </div>
     </div>    
 <?php get_footer();?> 
-     
-  
